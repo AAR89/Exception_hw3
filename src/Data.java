@@ -31,6 +31,7 @@ java и создать свои. Исключение должно быть ко
 должен увидеть стектрейс ошибки.
 
 Иванов Иван Иваныч 13.07.2005 89451312239 m
+Иванов Иван Иваныч 13.07.2005 89451312239
 Иванов Иван Иваныч 13.07.2005 88452226308 m
 Иванова Иванна Ивановна 12.11.2011 89517318827 f
 Иванов Иван Иваныч 13.0.2005 89451312 s
@@ -49,7 +50,11 @@ public class Data extends NumberFormatException {
         String stringData = inputData.nextLine();
         String[] splitArray = stringData.split(" ");
 
-        String fileName = "file.txt";
+        if (splitArray.length != 6) {
+            System.out.println("Вы ввели неверное количество данных.Повторите ввод.");
+            data();
+        }
+
         if (splitArray[3].length() == 10) {
             try {
                 Date date = new SimpleDateFormat("dd.MM.yyyy").parse(splitArray[3]);
@@ -69,6 +74,7 @@ public class Data extends NumberFormatException {
             System.out.println("Неверный телефон.");
         }
 
+        String fileName = "file.txt";
         if (splitArray[3].length() == 10 && splitArray[4].length() == 11
                 && Objects.equals(splitArray[5], "f") || Objects.equals(splitArray[5], "m")) {
             try (FileWriter fw = new FileWriter(fileName, true)) {
@@ -76,7 +82,7 @@ public class Data extends NumberFormatException {
                 fw.append('\n');
                 System.out.println("Данные записаны в файл.");
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                System.out.println("Error" + e);
             }
         } else {
             System.out.println("Данные введеные неверно, повторите ввод.");
