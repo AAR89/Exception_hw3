@@ -69,7 +69,6 @@ public class Data extends NumberFormatException {
             System.out.println("Неверный телефон.");
         }
 
-
         if (splitArray[3].length() == 10 && splitArray[4].length() == 11
                 && Objects.equals(splitArray[5], "f") || Objects.equals(splitArray[5], "m")) {
             try (FileWriter fw = new FileWriter(fileName, true)) {
