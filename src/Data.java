@@ -39,39 +39,46 @@ java и создать свои. Исключение должно быть ко
 
 public class Data extends NumberFormatException {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         data();
     }
 
     public static void data() {
-        Scanner inputData = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Введите данные через пробел " +
                 "(Фамилия Имя Отчество датарождения номертелефона пол): ");
-        String stringData = inputData.nextLine();
+        String stringData = scanner.nextLine().trim();
         String[] splitArray = stringData.split(" ");
 
         if (splitArray.length != 6) {
-            System.out.println("Вы ввели неверное количество данных.Повторите ввод.");
-            data();
+            throw new IllegalArgumentException("Вы ввели неверное количество данных.Повторите ввод.");
         }
 
         if (splitArray[3].length() == 10) {
             try {
                 Date date = new SimpleDateFormat("dd.MM.yyyy").parse(splitArray[3]);
-                System.out.println(date);
-            } catch (Exception ignored) {
+                System.out.println(date + " Вы ввели верный формат даты");
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Неверная дата.");
             }
-        } else {
-            System.out.println("Неверная дата.");
         }
+
         if (splitArray[4].length() == 11) {
             try {
                 long phone = Long.parseLong(splitArray[4]);
-                System.out.println(phone);
-            } catch (Exception ignored) {
+                System.out.println(phone + " Вы ввели верный формат телефона");
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Неверный формат номера телефона");
             }
-        } else {
-            System.out.println("Неверный телефон.");
+        }
+
+        if (!Objects.equals(splitArray[5], "f") || !Objects.equals(splitArray[5], "m")) {
+            try {
+                char[] genderArray = splitArray[5].toCharArray();
+                System.out.println(genderArray[0] + " Вы ввели ввели верный формат пола");
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Неверное значение пола");
+            }
         }
 
         String fileName = "file.txt";
@@ -81,19 +88,17 @@ public class Data extends NumberFormatException {
                 fw.write(String.join(", ", splitArray));
                 fw.append('\n');
                 System.out.println("Данные записаны в файл.");
+            } catch (IllegalArgumentException e) {
+                System.err.println(e.getMessage());
             } catch (IOException e) {
-                System.out.println("Error" + e);
+                System.err.println("Ошибка записи в файл");
+                e.printStackTrace();
             }
         } else {
             System.out.println("Данные введеные неверно, повторите ввод.");
             data();
-            inputData.close();
+            scanner.close();
         }
-    }
-
-    @Override
-    public String getMessage() {
-        return super.getMessage();
     }
 }
 
